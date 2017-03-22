@@ -1,0 +1,10 @@
+#!/bin/bash
+
+rsync \
+    --archive \
+    --compress \
+    --copy-links \
+    --cvs-exclude \
+    --perms \
+    --recursive \
+    * pi@$1:~/RC_CAR/

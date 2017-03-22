@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+project(RC_CAR_PROJECT)
+set (OpenCV_DIR /usr/local/bin/opencv3)
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11") 
+add_definitions(-D RUN_CONTROLS)
+find_package( OpenCV REQUIRED )
+find_package( Threads )
+add_executable(run main.cpp libs/camera.h libs/camera.cpp controls.h controls.cpp libs/PCA9685.h libs/PCA9685.cpp )
+target_link_libraries(run ${OpenCV_LIBS} ${CMAKE_THREAD_LIBS_INIT})
+
