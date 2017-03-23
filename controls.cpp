@@ -41,7 +41,7 @@ void Controls::turnWheels(double degree)
     {
         degree = MIN_ANGLE;
     }
-    double percent = degree / MAX_ANGLE;
+    double percent = degree / (MAX_ANGLE - MIN_ANGLE);
     double dutyCycle = MIN_DUTY_CYCLE_SERVO + (percent * (MAX_DUTY_CYCLE_SERVO - MIN_DUTY_CYCLE_SERVO));
     pwm.setPWM(SERVO_PORT, 0, (int)dutyCycle);
 }

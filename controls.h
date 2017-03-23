@@ -7,23 +7,23 @@
 #include <thread>
 #include "libs/PCA9685.h"
 
-#define PCA9685_ADDRESS					0x40
-#define PCA9685_FREQUENCY   			      60
-#define I2C_ADAPTER 			            1
+#define PCA9685_ADDRESS					                0x40
+#define PCA9685_FREQUENCY   			              60
+#define I2C_ADAPTER 			                      1
 
 #define SERVO_PORT                              0
 #define MOTOR_PORT                              8
 
 //SERVO DEFINES
-#define MIN_ANGLE                               0
-#define MAX_ANGLE                               180
+#define MIN_ANGLE                               45
+#define MAX_ANGLE                               135
 
 #define MIN_DUTY_CYCLE_SERVO                    310
 #define MAX_DUTY_CYCLE_SERVO                    490
 
 //MOTOR DEFINES 
 #define MIN_DUTY_CYCLE_MOTOR                    400
-#define MAX_DUTY_CYCLE_MOTOR                    1000
+#define MAX_DUTY_CYCLE_MOTOR                    900
 
 
 class Controls {
