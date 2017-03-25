@@ -3,3 +3,6 @@ cmake_install.cmake
 CMakeFiles/
 CMakeCache.txt
 run
+
+.vscode/settings.json
+.vscode/
