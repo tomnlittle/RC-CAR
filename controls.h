@@ -15,11 +15,11 @@
 #define MOTOR_PORT                              8
 
 //SERVO DEFINES
-#define MIN_ANGLE                               45
-#define MAX_ANGLE                               135
+#define MIN_ANGLE                               55
+#define MAX_ANGLE                               125
 
-#define MIN_DUTY_CYCLE_SERVO                    310
-#define MAX_DUTY_CYCLE_SERVO                    490
+#define MIN_DUTY_CYCLE_SERVO                    315
+#define MAX_DUTY_CYCLE_SERVO                    485
 
 //MOTOR DEFINES 
 #define MIN_DUTY_CYCLE_MOTOR                    400
@@ -31,7 +31,7 @@ class Controls {
                 /*
                   This is called when the class is initialised
                 */
-                Controls(double init_speed = 0, double init_angle = 90, 
+                Controls(double init_speed = 0, double init_angle = MIN_ANGLE, 
                                 double i_Motor = 0, double d_Motor = 0, double p_Motor = 0,
                                 double i_Angle = 0, double d_Angle = 0, double p_Angle = 0);
                 /*
@@ -43,6 +43,12 @@ class Controls {
                   Returns the current speed of the car 
                 */
                 double getCurrentSpeed();
+
+                /*
+                  Returns the current angle of the wheels
+                */
+
+                double getCurrentAngle();
 
                 /*
                   Updates the desired speed of the car 

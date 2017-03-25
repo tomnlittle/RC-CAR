@@ -17,9 +17,11 @@ Controls::Controls(double init_speed, double init_angle,
     motor_pid.init(0, p_Motor, i_Motor, d_Motor);
     angle_pid.init(0, p_Angle, i_Angle, d_Angle);
 
+    motor_pid.updatePID(desired_speed, current_speed);
+    angle_pid.updatePID(desired_angle, current_angle);
+
     threadActive = false;
     updateControlThread = std::thread(&Controls::controlThread, this);
-    
 }
 
 Controls::~Controls()
@@ -39,13 +41,30 @@ double Controls::getCurrentSpeed()
     return current_speed;
 }
 
+double Controls::getCurrentAngle()
+{
+    return current_angle;
+}
+
 void Controls::setDesiredSpeed(double speed)
 {
+    if (speed > 100.00 || speed < 0.00)
+        return;
     desired_speed = speed;
 }
 void Controls::setDesiredAngle(double angle)
 {
-    desired_angle = angle;
+    if (angle > MAX_ANGLE)
+    {
+        desired_angle = MAX_ANGLE;
+    }
+    else if (angle < MIN_ANGLE)
+    {
+        desired_angle = MIN_ANGLE;
+    } else {
+        desired_angle = angle;
+    }
+    
 }
 
 void Controls::controlThread()
@@ -54,33 +73,28 @@ void Controls::controlThread()
     while(threadActive){
         updateSpeed();
         updateAngle();
+        sleep(2);
     }
 }
 
 void Controls::updateSpeed()
 {
-    if (desired_speed > 100.00 || desired_speed < 0.00)
-        return;
     motor_pid.updatePID(desired_speed, current_speed);
-    double percent = motor_pid.getPID() / 100.00;
+    double pid_value = motor_pid.getPID();
+    double percent = (desired_speed + pid_value) / 100.00;
     double dutyCycle = MIN_DUTY_CYCLE_MOTOR + (percent * (MAX_DUTY_CYCLE_MOTOR - MIN_DUTY_CYCLE_MOTOR));
     pwm.setPWM(MOTOR_PORT, 0, (int)dutyCycle);
-    current_speed = dutyCycle;
+    current_speed = desired_speed + pid_value;
 }
 
 void Controls::updateAngle()
 {
-    if (desired_angle > MAX_ANGLE)
-    {
-        desired_angle = MAX_ANGLE;
-    }
-    else if (desired_angle < MIN_ANGLE)
-    {
-        desired_angle = MIN_ANGLE;
-    }
     angle_pid.updatePID(desired_angle, current_angle);
-    double percent = angle_pid.getPID() / (MAX_ANGLE - MIN_ANGLE);
+    double pid_value = angle_pid.getPID();
+    double new_value = pid_value + desired_angle;
+    double degree_range = MAX_ANGLE - MIN_ANGLE;
+    double percent = (new_value - degree_range/2.00) / degree_range;
     double dutyCycle = MIN_DUTY_CYCLE_SERVO + (percent * (MAX_DUTY_CYCLE_SERVO - MIN_DUTY_CYCLE_SERVO));
     pwm.setPWM(SERVO_PORT, 0, (int)dutyCycle);
-    current_angle = dutyCycle;
+    current_angle = pid_value + desired_angle; 
 }

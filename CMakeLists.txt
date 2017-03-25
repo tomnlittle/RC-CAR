@@ -5,6 +5,6 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 add_definitions(-D RUN_CONTROLS)
 find_package( OpenCV REQUIRED )
 find_package( Threads )
-add_executable(run main.cpp libs/camera.h libs/camera.cpp controls.h controls.cpp libs/PCA9685.h libs/PCA9685.cpp )
+add_executable(run main.cpp libs/camera.h libs/camera.cpp controls.h controls.cpp libs/PCA9685.h libs/PCA9685.cpp libs/PID.h libs/PID.cpp)
 target_link_libraries(run ${OpenCV_LIBS} ${CMAKE_THREAD_LIBS_INIT})
 
