@@ -15,13 +15,13 @@ int main(int argc, char **argv){
 	Controls car;
 
 	Camera cam(CAMERA_ID, NOISE_REDUCTION_LEVEL);   
-	printf("CV Version : %s \n", CV_VERSION); //prints the openCV version
+	printf("OPENCV Version : %s \n", CV_VERSION); //prints the openCV version
 	
 	while(true){
 		char hold_value = ' ';
 		std::cin >> hold_value;
 		if(hold_value == 'w'){
-			speed += 2.00;
+			speed += 1.0;
 		} else if(hold_value == 's'){
 			speed -= 2.00;
 		} else if (hold_value == 'x'){
@@ -36,7 +36,7 @@ int main(int argc, char **argv){
 		car.setDesiredAngle(degree);
 		car.setDesiredSpeed(speed);
 
-		std::cout << "Degree : " << car.getCurrentAngle() << std::endl;
+		//std::cout << "Degree : " << car.getCurrentAngle() << std::endl;
 		std::cout << "Speed : " << car.getCurrentSpeed() << "%" << std::endl;
 	}
  

@@ -22,8 +22,9 @@
 #define MAX_DUTY_CYCLE_SERVO                    485
 
 //MOTOR DEFINES 
-#define MIN_DUTY_CYCLE_MOTOR                    400
-#define MAX_DUTY_CYCLE_MOTOR                    900
+#define NEUTRAL_DUTY_CYCLE_MOTOR                400
+#define MIN_DUTY_CYCLE_MOTOR                    350//436
+#define MAX_DUTY_CYCLE_MOTOR                    550
 
 
 class Controls {
@@ -89,6 +90,11 @@ class Controls {
                   Manages the dutycycle of the servo and the associated PID algorithm 
                 */
                 void updateAngle();
+
+                /*
+                  Calibrates the motors and servo
+                */
+                void pwmCalibration();
 
                 //The PWM i2c instance
                 PCA9685 pwm;

@@ -20,8 +20,10 @@ Controls::Controls(double init_speed, double init_angle,
     motor_pid.updatePID(desired_speed, current_speed);
     angle_pid.updatePID(desired_angle, current_angle);
 
+    pwmCalibration();
+
     threadActive = false;
-    updateControlThread = std::thread(&Controls::controlThread, this);
+    //updateControlThread = std::thread(&Controls::controlThread, this);
 }
 
 Controls::~Controls()
@@ -32,7 +34,7 @@ Controls::~Controls()
         updateControlThread.join();
     }
     //Stops the motor after a safe exit
-    pwm.setPWM(MOTOR_PORT, 0, MIN_DUTY_CYCLE_MOTOR);
+    pwm.setPWM(MOTOR_PORT, 0, NEUTRAL_DUTY_CYCLE_MOTOR);
     pwm.reset();
 }
 
@@ -64,7 +66,15 @@ void Controls::setDesiredAngle(double angle)
     } else {
         desired_angle = angle;
     }
-    
+}
+
+void Controls::pwmCalibration(){
+    //Motor Calibration
+    pwm.setPWM(MOTOR_PORT, 0, NEUTRAL_DUTY_CYCLE_MOTOR);
+    std::cout << "Calibrating..." << std::endl;
+    sleep(5);
+    std::cout << "done" << std::endl;
+    pwm.setPWM(MOTOR_PORT, 0, MIN_DUTY_CYCLE_MOTOR);
 }
 
 void Controls::controlThread()
@@ -82,9 +92,10 @@ void Controls::updateSpeed()
     motor_pid.updatePID(desired_speed, current_speed);
     double pid_value = motor_pid.getPID();
     double percent = (desired_speed + pid_value) / 100.00;
-    double dutyCycle = MIN_DUTY_CYCLE_MOTOR + (percent * (MAX_DUTY_CYCLE_MOTOR - MIN_DUTY_CYCLE_MOTOR));
+    double dutyCycle = NEUTRAL_DUTY_CYCLE_MOTOR + (percent * (MAX_DUTY_CYCLE_MOTOR - NEUTRAL_DUTY_CYCLE_MOTOR));
     pwm.setPWM(MOTOR_PORT, 0, (int)dutyCycle);
     current_speed = desired_speed + pid_value;
+    std::cout << dutyCycle << std::endl;
 }
 
 void Controls::updateAngle()
